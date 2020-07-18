@@ -8,6 +8,7 @@ class Recipe < ActiveRecord::Base
 	mount_uploader :picture, PictureUploader 
 	#validate size both on server side meaning model as well as client side
 	validate :picture_size
+	default_scope -> { order(updated_at: :desc)}
 
 	def thumbs_up_total
 		self.likes.where(like: true).size
