@@ -1,6 +1,6 @@
 class RecipesController < ApplicationController
 	def index
-		@recipes = Recipe.all.sort_by{|likes| likes.thumbs_up_total}.reverse 			#stores the model into a instance variable where it is pushed to controller and availble in the view
+		@recipes = Recipe.paginate(page: params[:page], per_page: 4)			#stores the model into a instance variable where it is pushed to controller and availble in the view
 	end
 
 	def show
