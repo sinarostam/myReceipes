@@ -1,3 +1,21 @@
+Chefs:
+what we have already:
+-Chef model and validation
+-Chef table with column chefname and email
+
+what we need to do:
+- Add passwords to the chef table so chefs can be authenticated and logged in
+- Use email as log in credentials, since email is unique
+- ability to register new chef to use the app
+- ability to display chef profile
+- ability to list chef using the app
+- ability for chef to log in and log out of the app
+- restrict actions like create recipe, edit recipe and like feature to logged in chef only
+- restricting edit tof recipe by chefs who created the recipe.
+
+
+First Part->/////////////////////////
+
 testing specs for recipes:
 name: string
 summary: text
