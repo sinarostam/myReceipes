@@ -1,10 +1,14 @@
 class RecipesController < ApplicationController
+	before_action :set_recipe, only: [:edit, :update, :show, :like]  #		@recipe = Recipe.find(params[:id])
+	before_action :require_user, except: [:show, :index] #user does not have to be logged in to see the recipes
+	before_action :require_same_user, only: [:edit, :update]
+	#order is very important
+
 	def index
 		@recipes = Recipe.paginate(page: params[:page], per_page: 4)			#stores the model into a instance variable where it is pushed to controller and availble in the view
 	end
 
 	def show
-		@recipe = Recipe.find(params[:id])
 	end
 
 	def new
@@ -12,7 +16,7 @@ class RecipesController < ApplicationController
 	end
 	def create
 		@recipe = Recipe.new(recipe_params)
-		@recipe.chef= Chef.find(2)
+		@recipe.chef= current_user
 
 		if @recipe.save
 			flash[:success] = "Your Recipe was created successfully"
@@ -23,11 +27,9 @@ class RecipesController < ApplicationController
 	end
 
 	def edit
-		@recipe = Recipe.find(params[:id])
 	end
 
 	def update
-		@recipe = Recipe.find(params[:id])
 		if @recipe.update(recipe_params)
 			flash[:success] = "Your Recipe was updated successfully"
 			redirect_to recipe_path(@recipe)			#redirect to show recipe page after update
@@ -37,8 +39,7 @@ class RecipesController < ApplicationController
 	end
 
 	def like
-		@recipe = Recipe.find(params[:id])
-		like = Like.create(like: params[:like], chef: Chef.first, recipe: @recipe)
+		like = Like.create(like: params[:like], chef: current_user, recipe: @recipe)
 		if like.valid?
 			flash[:success] = "Your Selection was successful"
 			redirect_back fallback_location: root_path
@@ -52,5 +53,16 @@ class RecipesController < ApplicationController
 	private
 		def recipe_params
 			params.require(:recipe).permit(:name, :summary, :description, :picture)
+		end
+
+		def set_recipe
+			@recipe = Recipe.find(params[:id])
+
+		end
+		def require_same_user
+			if current_user != @recipe.chef
+				flash[:danger] = "You can only edit your own recipes"
+				redirect_to recipes_path
+			end
 		end
 end	
