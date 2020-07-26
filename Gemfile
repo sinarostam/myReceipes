@@ -30,6 +30,7 @@ gem 'mini_magick', '3.8.0'
 gem 'will_paginate', '~> 3.1.0'
 gem 'bootstrap-will_paginate'
 gem 'fog'
+gem 'fog-core'
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 4.0'
 # Use ActiveModel has_secure_password
